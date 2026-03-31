@@ -18,37 +18,37 @@
 ### Dashboard — Live Status
 
 - [ ] **LIVE-01**: User sees count of total services for today
-- [ ] **LIVE-02**: User sees count of services delivered (CUMPLIÓ CITA populated)
-- [ ] **LIVE-03**: User sees count of services with appointment met (CUMPLIÓ CITA = SI)
-- [ ] **LIVE-04**: User sees count of services with appointment missed (CUMPLIÓ CITA = NO)
-- [ ] **LIVE-05**: User sees count of services pending (no CUMPLIÓ CITA value yet)
+- [ ] **LIVE-02**: User sees count of services delivered (CUMPLIO CITA populated)
+- [ ] **LIVE-03**: User sees count of services with appointment met (CUMPLIO CITA = SI)
+- [ ] **LIVE-04**: User sees count of services with appointment missed (CUMPLIO CITA = NO)
+- [ ] **LIVE-05**: User sees count of services pending (no CUMPLIO CITA value yet)
 - [ ] **LIVE-06**: Dashboard auto-refreshes data without manual page reload
 
 ### Dashboard — Filterable Table
 
 - [ ] **TABLE-01**: User sees all services in a data table with all 15 columns
 - [ ] **TABLE-02**: User can filter by date (FECHA)
-- [ ] **TABLE-03**: User can filter by tipo de operación (DEDICADO, CONSOLIDADO, MEDTRONIC, ROCHE PHARMA, etc.)
+- [ ] **TABLE-03**: User can filter by tipo de operacion (DEDICADO, CONSOLIDADO, MEDTRONIC, ROCHE PHARMA, etc.)
 - [ ] **TABLE-04**: User can filter by punto de cargue
 - [ ] **TABLE-05**: User can filter by placa (vehicle plate)
-- [ ] **TABLE-06**: User can filter by asignación de servicio (SOS URGENCIA VITAL, URGENCIA, CONSOLIDADO)
-- [ ] **TABLE-07**: User can filter by cumplió cita (SI/NO/pending)
+- [ ] **TABLE-06**: User can filter by asignacion de servicio (SOS URGENCIA VITAL, URGENCIA, CONSOLIDADO)
+- [ ] **TABLE-07**: User can filter by cumplio cita (SI/NO/pending)
 - [ ] **TABLE-08**: Filters combine (AND logic) for precise querying
 
 ### Dashboard — Compliance Metrics
 
-- [ ] **KPI-01**: User sees overall appointment compliance percentage (CUMPLIÓ CITA = SI / total completed)
-- [ ] **KPI-02**: User sees compliance breakdown by tipo de operación
-- [ ] **KPI-03**: User sees compliance breakdown by asignación de servicio
+- [ ] **KPI-01**: User sees overall appointment compliance percentage (CUMPLIO CITA = SI / total completed)
+- [ ] **KPI-02**: User sees compliance breakdown by tipo de operacion
+- [ ] **KPI-03**: User sees compliance breakdown by asignacion de servicio
 - [ ] **KPI-04**: User sees compliance breakdown by punto de cargue
 - [ ] **KPI-05**: User sees compliance trend over time (using historico data)
 
 ### Dashboard — Incidencias Report
 
-- [ ] **INC-01**: User sees a dedicated list of all services where CUMPLIÓ CITA = NO
-- [ ] **INC-02**: Each incidencia shows: fecha, punto cargue, tipo operación, placa, punto entrega, cita entrega, observaciones
+- [ ] **INC-01**: User sees a dedicated list of all services where CUMPLIO CITA = NO
+- [ ] **INC-02**: Each incidencia shows: fecha, punto cargue, tipo operacion, placa, punto entrega, cita entrega, observaciones
 - [ ] **INC-03**: User can filter incidencias by date range
-- [ ] **INC-04**: User can filter incidencias by tipo de operación
+- [ ] **INC-04**: User can filter incidencias by tipo de operacion
 
 ### Views
 
@@ -94,45 +94,45 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHEET-01 | TBD | Pending |
-| SHEET-02 | TBD | Pending |
-| SHEET-03 | TBD | Pending |
-| SHEET-04 | TBD | Pending |
-| SHEET-05 | TBD | Pending |
-| SHEET-06 | TBD | Pending |
-| SHEET-07 | TBD | Pending |
-| LIVE-01 | TBD | Pending |
-| LIVE-02 | TBD | Pending |
-| LIVE-03 | TBD | Pending |
-| LIVE-04 | TBD | Pending |
-| LIVE-05 | TBD | Pending |
-| LIVE-06 | TBD | Pending |
-| TABLE-01 | TBD | Pending |
-| TABLE-02 | TBD | Pending |
-| TABLE-03 | TBD | Pending |
-| TABLE-04 | TBD | Pending |
-| TABLE-05 | TBD | Pending |
-| TABLE-06 | TBD | Pending |
-| TABLE-07 | TBD | Pending |
-| TABLE-08 | TBD | Pending |
-| KPI-01 | TBD | Pending |
-| KPI-02 | TBD | Pending |
-| KPI-03 | TBD | Pending |
-| KPI-04 | TBD | Pending |
-| KPI-05 | TBD | Pending |
-| INC-01 | TBD | Pending |
-| INC-02 | TBD | Pending |
-| INC-03 | TBD | Pending |
-| INC-04 | TBD | Pending |
-| VIEW-01 | TBD | Pending |
-| VIEW-02 | TBD | Pending |
-| VIEW-03 | TBD | Pending |
+| SHEET-01 | Phase 1 | Pending |
+| SHEET-02 | Phase 1 | Pending |
+| SHEET-03 | Phase 1 | Pending |
+| SHEET-04 | Phase 1 | Pending |
+| SHEET-05 | Phase 2 | Pending |
+| SHEET-06 | Phase 2 | Pending |
+| SHEET-07 | Phase 2 | Pending |
+| LIVE-01 | Phase 4 | Pending |
+| LIVE-02 | Phase 4 | Pending |
+| LIVE-03 | Phase 4 | Pending |
+| LIVE-04 | Phase 4 | Pending |
+| LIVE-05 | Phase 4 | Pending |
+| LIVE-06 | Phase 4 | Pending |
+| TABLE-01 | Phase 5 | Pending |
+| TABLE-02 | Phase 5 | Pending |
+| TABLE-03 | Phase 5 | Pending |
+| TABLE-04 | Phase 5 | Pending |
+| TABLE-05 | Phase 5 | Pending |
+| TABLE-06 | Phase 5 | Pending |
+| TABLE-07 | Phase 5 | Pending |
+| TABLE-08 | Phase 5 | Pending |
+| KPI-01 | Phase 6 | Pending |
+| KPI-02 | Phase 6 | Pending |
+| KPI-03 | Phase 6 | Pending |
+| KPI-04 | Phase 6 | Pending |
+| KPI-05 | Phase 7 | Pending |
+| INC-01 | Phase 8 | Pending |
+| INC-02 | Phase 8 | Pending |
+| INC-03 | Phase 8 | Pending |
+| INC-04 | Phase 8 | Pending |
+| VIEW-01 | Phase 9 | Pending |
+| VIEW-02 | Phase 10 | Pending |
+| VIEW-03 | Phase 11 | Pending |
 
 **Coverage:**
 - v1 requirements: 33 total
-- Mapped to phases: 0
-- Unmapped: 33 ⚠️
+- Mapped to phases: 33
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-31*
-*Last updated: 2026-03-31 after initial definition*
+*Last updated: 2026-03-31 after roadmap phase mapping*
