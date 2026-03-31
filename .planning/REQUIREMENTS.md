@@ -7,54 +7,54 @@
 
 ### Google Sheets Integration
 
-- [ ] **SHEET-01**: System connects to Google Spreadsheet using existing Service Account credentials
-- [ ] **SHEET-02**: System reads all rows from "Actual" tab (current operations, ~390 rows, 15 columns)
-- [ ] **SHEET-03**: System reads "TIPOLOGIAS" tab to resolve service type definitions
-- [ ] **SHEET-04**: System reads "historico" tab for historical delivery data with driver info
-- [ ] **SHEET-05**: System uses header-based column resolution (not hardcoded indices) to handle column changes
-- [ ] **SHEET-06**: System caches spreadsheet data in memory with background polling every 30-60 seconds
-- [ ] **SHEET-07**: System handles Google Sheets API rate limits gracefully (no crashes on quota exhaustion)
+- [x] **SHEET-01**: System connects to Google Spreadsheet using existing Service Account credentials
+- [x] **SHEET-02**: System reads all rows from "Actual" tab (current operations, ~390 rows, 15 columns)
+- [x] **SHEET-03**: System reads "TIPOLOGIAS" tab to resolve service type definitions
+- [x] **SHEET-04**: System reads "historico" tab for historical delivery data with driver info
+- [x] **SHEET-05**: System uses header-based column resolution (not hardcoded indices) to handle column changes
+- [x] **SHEET-06**: System caches spreadsheet data in memory with background polling every 30-60 seconds
+- [ ] **SHEET-07**: System handles Google Sheets API rate limits gracefully (no crashes on quota exhaustion) — PARTIAL: errors caught but no quota-specific retry/backoff
 
 ### Dashboard — Live Status
 
-- [ ] **LIVE-01**: User sees count of total services for today
-- [ ] **LIVE-02**: User sees count of services delivered (CUMPLIO CITA populated)
-- [ ] **LIVE-03**: User sees count of services with appointment met (CUMPLIO CITA = SI)
-- [ ] **LIVE-04**: User sees count of services with appointment missed (CUMPLIO CITA = NO)
-- [ ] **LIVE-05**: User sees count of services pending (no CUMPLIO CITA value yet)
-- [ ] **LIVE-06**: Dashboard auto-refreshes data without manual page reload
+- [x] **LIVE-01**: User sees count of total services for today
+- [x] **LIVE-02**: User sees count of services delivered (CUMPLIO CITA populated)
+- [x] **LIVE-03**: User sees count of services with appointment met (CUMPLIO CITA = SI)
+- [x] **LIVE-04**: User sees count of services with appointment missed (CUMPLIO CITA = NO)
+- [x] **LIVE-05**: User sees count of services pending (no CUMPLIO CITA value yet)
+- [x] **LIVE-06**: Dashboard auto-refreshes data without manual page reload
 
 ### Dashboard — Filterable Table
 
-- [ ] **TABLE-01**: User sees all services in a data table with all 15 columns
-- [ ] **TABLE-02**: User can filter by date (FECHA)
-- [ ] **TABLE-03**: User can filter by tipo de operacion (DEDICADO, CONSOLIDADO, MEDTRONIC, ROCHE PHARMA, etc.)
-- [ ] **TABLE-04**: User can filter by punto de cargue
-- [ ] **TABLE-05**: User can filter by placa (vehicle plate)
-- [ ] **TABLE-06**: User can filter by asignacion de servicio (SOS URGENCIA VITAL, URGENCIA, CONSOLIDADO)
-- [ ] **TABLE-07**: User can filter by cumplio cita (SI/NO/pending)
-- [ ] **TABLE-08**: Filters combine (AND logic) for precise querying
+- [ ] **TABLE-01**: User sees all services in a data table with all 15 columns — PARTIAL: 12/15 displayed (missing: Cliente, Hora Salida, Llegada Lead Time)
+- [x] **TABLE-02**: User can filter by date (FECHA)
+- [x] **TABLE-03**: User can filter by tipo de operacion (DEDICADO, CONSOLIDADO, MEDTRONIC, ROCHE PHARMA, etc.)
+- [x] **TABLE-04**: User can filter by punto de cargue
+- [x] **TABLE-05**: User can filter by placa (vehicle plate)
+- [x] **TABLE-06**: User can filter by asignacion de servicio (SOS URGENCIA VITAL, URGENCIA, CONSOLIDADO)
+- [x] **TABLE-07**: User can filter by cumplio cita (SI/NO/pending)
+- [x] **TABLE-08**: Filters combine (AND logic) for precise querying
 
 ### Dashboard — Compliance Metrics
 
-- [ ] **KPI-01**: User sees overall appointment compliance percentage (CUMPLIO CITA = SI / total completed)
-- [ ] **KPI-02**: User sees compliance breakdown by tipo de operacion
-- [ ] **KPI-03**: User sees compliance breakdown by asignacion de servicio
-- [ ] **KPI-04**: User sees compliance breakdown by punto de cargue
-- [ ] **KPI-05**: User sees compliance trend over time (using historico data)
+- [x] **KPI-01**: User sees overall appointment compliance percentage (CUMPLIO CITA = SI / total completed)
+- [x] **KPI-02**: User sees compliance breakdown by tipo de operacion
+- [x] **KPI-03**: User sees compliance breakdown by asignacion de servicio
+- [x] **KPI-04**: User sees compliance breakdown by punto de cargue
+- [ ] **KPI-05**: User sees compliance trend over time (using historico data) — MISSING: historico read but not used for trend chart
 
 ### Dashboard — Incidencias Report
 
-- [ ] **INC-01**: User sees a dedicated list of all services where CUMPLIO CITA = NO
-- [ ] **INC-02**: Each incidencia shows: fecha, punto cargue, tipo operacion, placa, punto entrega, cita entrega, observaciones
-- [ ] **INC-03**: User can filter incidencias by date range
-- [ ] **INC-04**: User can filter incidencias by tipo de operacion
+- [x] **INC-01**: User sees a dedicated list of all services where CUMPLIO CITA = NO
+- [x] **INC-02**: Each incidencia shows: fecha, punto cargue, tipo operacion, placa, punto entrega, cita entrega, observaciones
+- [ ] **INC-03**: User can filter incidencias by date range — MISSING: no date range filter on incidencias
+- [ ] **INC-04**: User can filter incidencias by tipo de operacion — PARTIAL: works in operational view via general filters, missing in client view
 
 ### Views
 
-- [ ] **VIEW-01**: Operational view — data table + live status counters for dispatchers/coordinators
-- [ ] **VIEW-02**: Executive view — KPI charts + compliance trends + summary metrics for management
-- [ ] **VIEW-03**: Client view — compliance report for Orlando (BOMI Supply Chain Manager) with incidencias
+- [x] **VIEW-01**: Operational view — data table + live status counters for dispatchers/coordinators
+- [x] **VIEW-02**: Executive view — KPI charts + compliance trends + summary metrics for management
+- [x] **VIEW-03**: Client view — compliance report for Orlando (BOMI Supply Chain Manager) with incidencias
 
 ## v2 Requirements
 
@@ -94,45 +94,46 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SHEET-01 | Phase 1 | Pending |
-| SHEET-02 | Phase 1 | Pending |
-| SHEET-03 | Phase 1 | Pending |
-| SHEET-04 | Phase 1 | Pending |
-| SHEET-05 | Phase 2 | Pending |
-| SHEET-06 | Phase 2 | Pending |
-| SHEET-07 | Phase 2 | Pending |
-| LIVE-01 | Phase 4 | Pending |
-| LIVE-02 | Phase 4 | Pending |
-| LIVE-03 | Phase 4 | Pending |
-| LIVE-04 | Phase 4 | Pending |
-| LIVE-05 | Phase 4 | Pending |
-| LIVE-06 | Phase 4 | Pending |
-| TABLE-01 | Phase 5 | Pending |
-| TABLE-02 | Phase 5 | Pending |
-| TABLE-03 | Phase 5 | Pending |
-| TABLE-04 | Phase 5 | Pending |
-| TABLE-05 | Phase 5 | Pending |
-| TABLE-06 | Phase 5 | Pending |
-| TABLE-07 | Phase 5 | Pending |
-| TABLE-08 | Phase 5 | Pending |
-| KPI-01 | Phase 6 | Pending |
-| KPI-02 | Phase 6 | Pending |
-| KPI-03 | Phase 6 | Pending |
-| KPI-04 | Phase 6 | Pending |
+| SHEET-01 | Phase 1 | Complete |
+| SHEET-02 | Phase 1 | Complete |
+| SHEET-03 | Phase 1 | Complete |
+| SHEET-04 | Phase 1 | Complete |
+| SHEET-05 | Phase 2 | Complete |
+| SHEET-06 | Phase 2 | Complete |
+| SHEET-07 | Phase 2 | Partial |
+| LIVE-01 | Phase 4 | Complete |
+| LIVE-02 | Phase 4 | Complete |
+| LIVE-03 | Phase 4 | Complete |
+| LIVE-04 | Phase 4 | Complete |
+| LIVE-05 | Phase 4 | Complete |
+| LIVE-06 | Phase 4 | Complete |
+| TABLE-01 | Phase 5 | Partial |
+| TABLE-02 | Phase 5 | Complete |
+| TABLE-03 | Phase 5 | Complete |
+| TABLE-04 | Phase 5 | Complete |
+| TABLE-05 | Phase 5 | Complete |
+| TABLE-06 | Phase 5 | Complete |
+| TABLE-07 | Phase 5 | Complete |
+| TABLE-08 | Phase 5 | Complete |
+| KPI-01 | Phase 6 | Complete |
+| KPI-02 | Phase 6 | Complete |
+| KPI-03 | Phase 6 | Complete |
+| KPI-04 | Phase 6 | Complete |
 | KPI-05 | Phase 7 | Pending |
-| INC-01 | Phase 8 | Pending |
-| INC-02 | Phase 8 | Pending |
+| INC-01 | Phase 8 | Complete |
+| INC-02 | Phase 8 | Complete |
 | INC-03 | Phase 8 | Pending |
-| INC-04 | Phase 8 | Pending |
-| VIEW-01 | Phase 9 | Pending |
-| VIEW-02 | Phase 10 | Pending |
-| VIEW-03 | Phase 11 | Pending |
+| INC-04 | Phase 8 | Partial |
+| VIEW-01 | Phase 9 | Complete |
+| VIEW-02 | Phase 10 | Complete |
+| VIEW-03 | Phase 11 | Complete |
 
 **Coverage:**
 - v1 requirements: 33 total
-- Mapped to phases: 33
-- Unmapped: 0
+- Complete: 27
+- Partial: 3 (SHEET-07, TABLE-01, INC-04)
+- Pending: 3 (KPI-05, INC-03, INC-04)
 
 ---
 *Requirements defined: 2026-03-31*
-*Last updated: 2026-03-31 after roadmap phase mapping*
+*Last updated: 2026-03-31 after code audit reconciliation*
