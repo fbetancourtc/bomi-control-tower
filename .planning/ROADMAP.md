@@ -12,17 +12,17 @@ Build a local-running logistics Control Tower dashboard that reads delivery data
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Project Scaffold & Google Sheets Connection** - FastAPI project structure with proven Sheets auth/reading from Diageo
-- [x] **Phase 2: Data Model & Caching Layer** - In-memory cache with background polling and header-based column mapping *(SHEET-07 partial)*
-- [x] **Phase 3: API Endpoints & Data Serving** - FastAPI routes that serve spreadsheet data as JSON for dashboard consumption
-- [x] **Phase 4: Live Status Dashboard** - Real-time counters showing today's delivery status at a glance
-- [x] **Phase 5: Filterable Data Table** - Full data table with combined filters for precise querying *(TABLE-01 partial: 12/15 cols)*
-- [x] **Phase 6: Compliance Metrics & KPIs** - Appointment compliance percentages with breakdowns by operation type, service, and location
-- [ ] **Phase 7: Compliance Trends** - Historical compliance trend using historico data *(KPI-05 not implemented)*
-- [x] **Phase 8: Incidencias Report** - Dedicated missed-appointment view with filtering *(INC-03, INC-04 gaps)*
-- [x] **Phase 9: Operational View** - Dispatcher-focused view combining live status + data table
-- [x] **Phase 10: Executive View** - Management-focused view with KPI charts and compliance trends
-- [x] **Phase 11: Client View** - BOMI-facing compliance report for Orlando with incidencias
+- [ ] **Phase 1: Project Scaffold & Google Sheets Connection** - FastAPI project structure with proven Sheets auth/reading from Diageo
+- [ ] **Phase 2: Data Model & Caching Layer** - In-memory cache with background polling and header-based column mapping
+- [ ] **Phase 3: API Endpoints & Data Serving** - FastAPI routes that serve spreadsheet data as JSON for dashboard consumption
+- [ ] **Phase 4: Live Status Dashboard** - Real-time counters showing today's delivery status at a glance
+- [ ] **Phase 5: Filterable Data Table** - Full data table with combined filters for precise querying
+- [ ] **Phase 6: Compliance Metrics & KPIs** - Appointment compliance percentages with breakdowns by operation type, service, and location
+- [ ] **Phase 7: Compliance Trends** - Historical compliance trend using historico data
+- [ ] **Phase 8: Incidencias Report** - Dedicated missed-appointment view with filtering
+- [ ] **Phase 9: Operational View** - Dispatcher-focused view combining live status + data table
+- [ ] **Phase 10: Executive View** - Management-focused view with KPI charts and compliance trends
+- [ ] **Phase 11: Client View** - BOMI-facing compliance report for Orlando with incidencias
 
 ## Phase Details
 
@@ -189,18 +189,16 @@ Plans:
 Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10 → 11
 Note: Phases 4, 5, 6, 8 can run in parallel after Phase 3. Phases 9, 10, 11 assemble earlier components.
 
-| Phase | Status | Gaps |
-|-------|--------|------|
-| 1. Project Scaffold & Google Sheets Connection | ✓ Complete | — |
-| 2. Data Model & Caching Layer | ✓ Complete | SHEET-07 partial (no retry/backoff) |
-| 3. API Endpoints & Data Serving | ✓ Complete | — |
-| 4. Live Status Dashboard | ✓ Complete | — |
-| 5. Filterable Data Table | ✓ Complete | TABLE-01 partial (12/15 cols displayed) |
-| 6. Compliance Metrics & KPIs | ✓ Complete | — |
-| 7. Compliance Trends | ○ Pending | KPI-05 not implemented |
-| 8. Incidencias Report | ✓ Complete | INC-03 missing, INC-04 partial |
-| 9. Operational View | ✓ Complete | — |
-| 10. Executive View | ✓ Complete | — |
-| 11. Client View | ✓ Complete | — |
-
-**Summary:** 10/11 phases complete. 27/33 requirements done. 6 gaps remain across 4 phases.
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Project Scaffold & Google Sheets Connection | 0/2 | Not started | - |
+| 2. Data Model & Caching Layer | 0/2 | Not started | - |
+| 3. API Endpoints & Data Serving | 0/1 | Not started | - |
+| 4. Live Status Dashboard | 0/2 | Not started | - |
+| 5. Filterable Data Table | 0/2 | Not started | - |
+| 6. Compliance Metrics & KPIs | 0/2 | Not started | - |
+| 7. Compliance Trends | 0/1 | Not started | - |
+| 8. Incidencias Report | 0/2 | Not started | - |
+| 9. Operational View | 0/1 | Not started | - |
+| 10. Executive View | 0/1 | Not started | - |
+| 11. Client View | 0/1 | Not started | - |
