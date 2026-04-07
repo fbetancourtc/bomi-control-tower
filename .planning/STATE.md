@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 Phase: 1 of 11 (Project Scaffold & Google Sheets Connection)
 Plan: 0 of 2 in current phase
 Status: Ready to plan
-Last activity: 2026-04-07 - Completed quick task 260407-mrc: Analizar lead time vs cita vs hora real de llegada para determinar cumplimiento de cita
+Last activity: 2026-04-07 - Completed quick task 260407-pfz: Dashboard design polish (responsive, sticky headers, KPI cards)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -79,6 +79,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260407-mrc | Analizar lead time vs cita vs hora real de llegada para determinar cumplimiento de cita | 2026-04-07 | 6321696 | [260407-mrc-analizar-lead-time-vs-cita-vs-hora-real-](./quick/260407-mrc-analizar-lead-time-vs-cita-vs-hora-real-/) |
+| 260407-pfz | Revisar diseno dashboard: responsive fixes, sticky headers, KPI cards, visual affordances | 2026-04-07 | f78c76b | [260407-pfz-revisar-dise-o-dashboard-mejoras-de-cali](./quick/260407-pfz-revisar-dise-o-dashboard-mejoras-de-cali/) |
 
 ## Session Continuity
 
