@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+{% block title %}Operativo — BOMI Control Tower{% endblock %}
+
+{% block content %}
+<!-- Status Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-primary">{{ metrics.total }}</div>
+                <div class="stat-label">Total Servicios</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-success">{{ metrics.met }}</div>
+                <div class="stat-label">Cumplieron (Manual)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-danger">{{ metrics.missed }}</div>
+                <div class="stat-label">Incumplieron</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-secondary">{{ metrics.pending }}</div>
+                <div class="stat-label">Pendientes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="compliance-big {% if metrics.compliance_pct >= 90 %}compliance-good{% elif metrics.compliance_pct >= 70 %}compliance-warning{% else %}compliance-bad{% endif %}">
+                    {{ metrics.compliance_pct }}%
+                </div>
+                <div class="stat-label">Cumplimiento (Manual)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="compliance-big {% if metrics.computed_compliance_pct >= 90 %}compliance-good{% elif metrics.computed_compliance_pct >= 70 %}compliance-warning{% else %}compliance-bad{% endif %}">
+                    {{ metrics.computed_compliance_pct }}%
+                </div>
+                <div class="stat-label">Cumplimiento (Calculado)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-lg">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value {% if metrics.avg_delta_minutes <= 0 %}text-success{% elif metrics.avg_delta_minutes <= 15 %}text-warning{% else %}text-danger{% endif %}">
+                    {% if metrics.avg_delta_minutes > 0 %}+{% endif %}{{ metrics.avg_delta_minutes }} min
+                </div>
+                <div class="stat-label">Delta Promedio</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filter-bar">
+    <form method="get" action="/" class="row g-2 align-items-end" id="filterForm">
+        <div class="col-md-2">
+            <label class="form-label small">Fecha</label>
+            <select class="form-select form-select-sm" name="fecha" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {% for f in filters.fechas %}
+                <option value="{{ f }}" {% if active_filters.fecha == f %}selected{% endif %}>{{ f }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small">Tipo Operación</label>
+            <select class="form-select form-select-sm" name="tipo_op" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                {% for t in filters.tipos_operacion %}
+                <option value="{{ t }}" {% if active_filters.tipo_op == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small">Punto Cargue</label>
+            <select class="form-select form-select-sm" name="punto_cargue" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                {% for p in filters.puntos_cargue %}
+                <option value="{{ p }}" {% if active_filters.punto_cargue == p %}selected{% endif %}>{{ p }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small">Placa</label>
+            <select class="form-select form-select-sm" name="placa" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {% for p in filters.placas %}
+                <option value="{{ p }}" {% if active_filters.placa == p %}selected{% endif %}>{{ p }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small">Asignación</label>
+            <select class="form-select form-select-sm" name="asignacion" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {% for a in filters.asignaciones %}
+                <option value="{{ a }}" {% if active_filters.asignacion == a %}selected{% endif %}>{{ a }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label class="form-label small">Cumplió</label>
+            <select class="form-select form-select-sm" name="cumplio" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                <option value="SI" {% if active_filters.cumplio == 'SI' %}selected{% endif %}>SI</option>
+                <option value="NO" {% if active_filters.cumplio == 'NO' %}selected{% endif %}>NO</option>
+                <option value="PENDIENTE" {% if active_filters.cumplio == 'PENDIENTE' %}selected{% endif %}>Pendiente</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <a href="/" class="btn btn-sm btn-outline-secondary w-100">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Services Table -->
+<div class="card stat-card mb-4">
+    <div class="card-body">
+        <h6 class="section-title">
+            <i class="bi bi-table"></i> Servicios
+            <span class="badge bg-primary ms-2">{{ filtered_count if filtered_count is defined else services|length }}</span>
+        </h6>
+        <div class="table-responsive">
+            <table class="table table-hover table-sm align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora Cargue</th>
+                        <th>Punto Cargue</th>
+                        <th>Tipo Op.</th>
+                        <th>Placa</th>
+                        <th>Asignación</th>
+                        <th>Punto Entrega</th>
+                        <th>Fecha Entrega</th>
+                        <th>Cita</th>
+                        <th>Hora Llegada</th>
+                        <th>Delta</th>
+                        <th>LT vs Real</th>
+                        <th>Cumplió</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in services %}
+                    <tr>
+                        <td class="text-nowrap">{{ s.fecha }}</td>
+                        <td class="text-nowrap">{{ s.hora_cargue }}</td>
+                        <td>{{ s.punto_cargue }}</td>
+                        <td>
+                            <span class="badge {% if 'DEDICADO' in s.tipo_operacion.upper() %}badge-dedicado{% elif 'CONSOLIDADO' in s.tipo_operacion.upper() %}badge-consolidado{% else %}bg-secondary{% endif %}">
+                                {{ s.tipo_operacion }}
+                            </span>
+                        </td>
+                        <td class="text-nowrap"><code>{{ s.placa }}</code></td>
+                        <td>
+                            <span class="badge {% if 'SOS' in s.asignacion_servicio.upper() %}badge-sos{% elif 'URGENCIA' in s.asignacion_servicio.upper() %}badge-urgencia{% elif 'CONSOLIDADO' in s.asignacion_servicio.upper() %}badge-consolidado{% else %}bg-secondary{% endif %}">
+                                {{ s.asignacion_servicio }}
+                            </span>
+                        </td>
+                        <td style="max-width: 250px;">{{ s.punto_entrega }}</td>
+                        <td class="text-nowrap">{{ s.fecha_entrega }}</td>
+                        <td class="text-nowrap">{{ s.cita_entrega }}</td>
+                        <td class="text-nowrap">{{ s.hora_llegada }}</td>
+                        <td class="text-nowrap">
+                            {% if s.arrival_delta_minutes is not none %}
+                                {% if s.arrival_delta_minutes <= 0 %}
+                                    <span class="badge bg-success">{{ s.arrival_delta_minutes }} min</span>
+                                {% elif s.arrival_delta_minutes <= 15 %}
+                                    <span class="badge bg-warning text-dark">+{{ s.arrival_delta_minutes }} min</span>
+                                {% else %}
+                                    <span class="badge bg-danger">+{{ s.arrival_delta_minutes }} min</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">--</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">
+                            {% if s.lead_time_delta_minutes is not none %}
+                                {% if s.lead_time_delta_minutes <= 0 %}
+                                    <span class="badge bg-secondary bg-opacity-50" style="font-size: 0.75rem;">{{ s.lead_time_delta_minutes }} min</span>
+                                {% else %}
+                                    <span class="badge bg-secondary bg-opacity-50" style="font-size: 0.75rem;">+{{ s.lead_time_delta_minutes }} min</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted">--</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if s.met_appointment %}
+                                <span class="badge badge-met"><i class="bi bi-check-circle"></i> SI</span>
+                            {% elif s.missed_appointment %}
+                                <span class="badge badge-missed"><i class="bi bi-x-circle"></i> NO</span>
+                            {% else %}
+                                <span class="badge badge-pending"><i class="bi bi-clock"></i> —</span>
+                            {% endif %}
+                        </td>
+                        <td style="max-width: 200px; font-size: 0.8rem;">{{ s.observaciones }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Incidencias -->
+{% if incidencias %}
+<div class="card stat-card mb-4 border-danger border-opacity-25">
+    <div class="card-body">
+        <h6 class="section-title" style="border-color: var(--bomi-danger); color: var(--bomi-danger);">
+            <i class="bi bi-exclamation-triangle"></i> Incidencias (Citas No Cumplidas)
+            <span class="badge bg-danger ms-2">{{ incidencias|length }}</span>
+        </h6>
+        <div class="table-responsive">
+            <table class="table table-hover table-sm">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Punto Cargue</th>
+                        <th>Tipo Op.</th>
+                        <th>Placa</th>
+                        <th>Punto Entrega</th>
+                        <th>Cita Entrega</th>
+                        <th>Hora Llegada</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in incidencias %}
+                    <tr>
+                        <td class="text-nowrap">{{ s.fecha }}</td>
+                        <td>{{ s.punto_cargue }}</td>
+                        <td>{{ s.tipo_operacion }}</td>
+                        <td><code>{{ s.placa }}</code></td>
+                        <td style="max-width: 250px;">{{ s.punto_entrega }}</td>
+                        <td class="text-nowrap">{{ s.cita_entrega }}</td>
+                        <td class="text-nowrap">{{ s.hora_llegada }}</td>
+                        <td style="max-width: 200px; font-size: 0.8rem;">{{ s.observaciones }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Apply URL filters to displayed services (server-side would be better but this works for now)
+    const params = new URLSearchParams(window.location.search);
+    const tbody = document.querySelector('table tbody');
+    if (!tbody) return;
+
+    const rows = tbody.querySelectorAll('tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        let show = true;
+
+        if (params.get('fecha') && cells[0] && !cells[0].textContent.includes(params.get('fecha'))) show = false;
+        if (params.get('tipo_op') && cells[3] && !cells[3].textContent.trim().toUpperCase().includes(params.get('tipo_op').toUpperCase())) show = false;
+        if (params.get('punto_cargue') && cells[2] && !cells[2].textContent.toUpperCase().includes(params.get('punto_cargue').toUpperCase())) show = false;
+        if (params.get('placa') && cells[4] && !cells[4].textContent.toUpperCase().includes(params.get('placa').toUpperCase())) show = false;
+        if (params.get('asignacion') && cells[5] && !cells[5].textContent.trim().toUpperCase().includes(params.get('asignacion').toUpperCase())) show = false;
+        if (params.get('cumplio')) {
+            const val = params.get('cumplio').toUpperCase();
+            const cumplioCell = cells[12] ? cells[12].textContent.trim().toUpperCase() : '';
+            if (val === 'SI' && !cumplioCell.includes('SI')) show = false;
+            if (val === 'NO' && !cumplioCell.includes('NO')) show = false;
+            if (val === 'PENDIENTE' && (cumplioCell.includes('SI') || cumplioCell.includes('NO'))) show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+    });
+});
+</script>
+{% endblock %}
