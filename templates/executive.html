@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Ejecutivo — BOMI Control Tower{% endblock %}
+
+{% block content %}
+<!-- Top-level KPIs -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="compliance-big {% if metrics.compliance_pct >= 90 %}compliance-good{% elif metrics.compliance_pct >= 70 %}compliance-warning{% else %}compliance-bad{% endif %}">
+                    {{ metrics.compliance_pct }}%
+                </div>
+                <div class="stat-label">Cumplimiento General</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-primary">{{ metrics.total }}</div>
+                <div class="stat-label">Total Servicios</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-success">{{ metrics.met }}</div>
+                <div class="stat-label">Citas Cumplidas</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center">
+                <div class="stat-value text-danger">{{ metrics.missed }}</div>
+                <div class="stat-label">Incidencias</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+    <!-- Compliance by Tipo Operación -->
+    <div class="col-md-6">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-bar-chart"></i> Cumplimiento por Tipo de Operación</h6>
+                <canvas id="chartTipoOp" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- Compliance by Asignación -->
+    <div class="col-md-6">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-pie-chart"></i> Cumplimiento por Asignación de Servicio</h6>
+                <canvas id="chartAsignacion" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Breakdown Tables -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-building"></i> Por Tipo de Operación</h6>
+                <table class="table table-sm">
+                    <thead><tr><th>Tipo</th><th>Total</th><th>Cumplió</th><th>%</th></tr></thead>
+                    <tbody>
+                        {% for name, data in metrics.by_tipo_op.items() %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ data.total }}</td>
+                            <td>{{ data.met }}</td>
+                            <td>
+                                <span class="badge {% if data.compliance_pct >= 90 %}bg-success{% elif data.compliance_pct >= 70 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ data.compliance_pct }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-truck"></i> Por Asignación</h6>
+                <table class="table table-sm">
+                    <thead><tr><th>Asignación</th><th>Total</th><th>Cumplió</th><th>%</th></tr></thead>
+                    <tbody>
+                        {% for name, data in metrics.by_asignacion.items() %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ data.total }}</td>
+                            <td>{{ data.met }}</td>
+                            <td>
+                                <span class="badge {% if data.compliance_pct >= 90 %}bg-success{% elif data.compliance_pct >= 70 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ data.compliance_pct }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-geo-alt"></i> Por Punto de Cargue</h6>
+                <table class="table table-sm">
+                    <thead><tr><th>Punto</th><th>Total</th><th>Cumplió</th><th>%</th></tr></thead>
+                    <tbody>
+                        {% for name, data in metrics.by_punto_cargue.items() %}
+                        <tr>
+                            <td style="font-size: 0.8rem;">{{ name }}</td>
+                            <td>{{ data.total }}</td>
+                            <td>{{ data.met }}</td>
+                            <td>
+                                <span class="badge {% if data.compliance_pct >= 90 %}bg-success{% elif data.compliance_pct >= 70 %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ data.compliance_pct }}%
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const tipoOpData = {{ metrics.by_tipo_op | tojson }};
+const asignacionData = {{ metrics.by_asignacion | tojson }};
+
+// Tipo Operación chart
+new Chart(document.getElementById('chartTipoOp'), {
+    type: 'bar',
+    data: {
+        labels: Object.keys(tipoOpData),
+        datasets: [
+            {
+                label: 'Cumplió',
+                data: Object.values(tipoOpData).map(d => d.met),
+                backgroundColor: '#27ae60',
+            },
+            {
+                label: 'No Cumplió',
+                data: Object.values(tipoOpData).map(d => d.missed),
+                backgroundColor: '#e74c3c',
+            },
+            {
+                label: 'Pendiente',
+                data: Object.values(tipoOpData).map(d => d.pending),
+                backgroundColor: '#95a5a6',
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: { x: { stacked: true }, y: { stacked: true } },
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+
+// Asignación chart
+new Chart(document.getElementById('chartAsignacion'), {
+    type: 'doughnut',
+    data: {
+        labels: Object.keys(asignacionData),
+        datasets: [{
+            data: Object.values(asignacionData).map(d => d.total),
+            backgroundColor: ['#8e44ad', '#e74c3c', '#3498db', '#2c5f8a', '#27ae60', '#f39c12', '#95a5a6']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+</script>
+{% endblock %}

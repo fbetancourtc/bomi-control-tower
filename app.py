@@ -14,7 +14,7 @@ from jinja2 import Environment, FileSystemLoader
 
 load_dotenv()
 
-from sheets.reader import SpreadsheetData, read_all  # noqa: E402
+from sheets.reader import SpreadsheetData, read_all, write_computed_compliance  # noqa: E402
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -129,12 +129,6 @@ def _compute_metrics(services):
             completed_count = v["met"] + v["missed"]
             v["compliance_pct"] = round(v["met"] / completed_count * 100, 1) if completed_count else 0
 
-    # Computed compliance (time-based, independent of manual CUMPLIO CITA column)
-    computed_completed = [s for s in services if s.computed_met_appointment is not None]
-    computed_met = [s for s in services if s.computed_met_appointment is True]
-    computed_missed = [s for s in services if s.computed_met_appointment is False]
-    computed_compliance_pct = (len(computed_met) / len(computed_completed) * 100) if computed_completed else 0
-
     # Average delta for completed services
     deltas = [s.arrival_delta_minutes for s in services if s.arrival_delta_minutes is not None]
     avg_delta = round(sum(deltas) / len(deltas), 1) if deltas else 0
@@ -146,10 +140,6 @@ def _compute_metrics(services):
         "missed": len(missed),
         "pending": len(pending),
         "compliance_pct": round(compliance_pct, 1),
-        "computed_met": len(computed_met),
-        "computed_missed": len(computed_missed),
-        "computed_completed": len(computed_completed),
-        "computed_compliance_pct": round(computed_compliance_pct, 1),
         "avg_delta_minutes": avg_delta,
         "by_tipo_op": dict(sorted(by_tipo_op.items())),
         "by_asignacion": dict(sorted(by_asignacion.items())),
@@ -296,7 +286,7 @@ async def api_services(
                 "hora_llegada": s.hora_llegada,
                 "cumplio_cita": s.cumplio_cita,
                 "arrival_delta_minutes": s.arrival_delta_minutes,
-                "computed_met_appointment": s.computed_met_appointment,
+                "met_appointment": s.met_appointment,
                 "lead_time_delta_minutes": s.lead_time_delta_minutes,
                 "observaciones": s.observaciones,
             }
@@ -310,6 +300,13 @@ async def api_services(
 async def api_metrics():
     """JSON API for dashboard metrics."""
     return _compute_metrics(_cache.services)
+
+
+@app.post("/api/sync-compliance")
+async def sync_compliance():
+    """Write computed CUMPLIO CITA values back to Google Sheet."""
+    result = await asyncio.to_thread(write_computed_compliance)
+    return result
 
 
 @app.get("/health")

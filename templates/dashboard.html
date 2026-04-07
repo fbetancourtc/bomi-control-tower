@@ -56,6 +56,67 @@
     </div>
 </div>
 
+<!-- Incidencias (PRIORITY — shown first) -->
+{% if incidencias %}
+<div class="ct-card ct-card-danger">
+    <div class="ct-card-header">
+        <div class="ct-danger-title">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Incidencias (Citas No Cumplidas)
+            <span class="ct-badge ct-danger-count">{{ incidencias|length }}</span>
+        </div>
+    </div>
+    <div class="ct-table-scroll">
+        <table class="ct-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>F. Entrega</th>
+                    <th>Placa</th>
+                    <th>Asignacion</th>
+                    <th>Punto Cargue</th>
+                    <th>Destino</th>
+                    <th>Cita</th>
+                    <th>Llegada</th>
+                    <th>Delta</th>
+                    <th>Obs.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in incidencias %}
+                <tr>
+                    <td class="muted">{{ loop.index }}</td>
+                    <td style="white-space:nowrap">{{ s.fecha_entrega }}</td>
+                    <td class="mono" style="white-space:nowrap">{{ s.placa }}</td>
+                    <td style="white-space:nowrap">
+                        {% if 'SOS' in s.asignacion_servicio.upper() %}
+                            <span class="ct-badge ct-badge-purple">{{ s.asignacion_servicio }}</span>
+                        {% elif 'CONSOLIDADO' in s.asignacion_servicio.upper() %}
+                            <span class="ct-badge ct-badge-blue">{{ s.asignacion_servicio }}</span>
+                        {% else %}
+                            <span class="ct-badge ct-badge-slate">{{ s.asignacion_servicio }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="truncate">{{ s.punto_cargue }}</td>
+                    <td class="truncate">{{ s.punto_entrega }}</td>
+                    <td class="mono" style="white-space:nowrap">{{ s.cita_entrega }}</td>
+                    <td class="mono" style="white-space:nowrap">
+                        {% if s.hora_llegada %}{% if ' ' in s.hora_llegada %}{{ s.hora_llegada.split(' ')[1] }}{% else %}{{ s.hora_llegada }}{% endif %}{% endif %}
+                    </td>
+                    <td style="white-space:nowrap">
+                        {% if s.arrival_delta_minutes is not none %}
+                            <span class="ct-badge ct-badge-red">+{{ s.arrival_delta_minutes }} min</span>
+                        {% endif %}
+                    </td>
+                    <td class="truncate muted" style="font-size:12px">{{ s.observaciones }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
 <!-- Active Shipments Table -->
 <div class="ct-card">
     <div class="ct-card-header">
@@ -117,23 +178,16 @@
                 {% for s in services %}
                 <tr class="{% if s.missed_appointment %}ct-row-danger{% elif s.is_pending %}ct-row-dim{% endif %}">
                     <td class="mono" style="white-space:nowrap">{{ s.fecha }}</td>
-                    <td>
-                        <div style="display:flex;align-items:center;gap:8px">
-                            <div style="padding:4px;background:rgba(0,81,244,0.1);border-radius:4px;display:flex">
-                                <i class="bi bi-truck" style="font-size:14px;color:#0051F4"></i>
-                            </div>
-                            <span class="mono">{{ s.placa }}</span>
-                        </div>
-                    </td>
-                    <td>
+                    <td class="mono" style="white-space:nowrap">{{ s.placa }}</td>
+                    <td style="white-space:nowrap">
                         {% if 'SOS' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-purple"><i class="bi bi-lightning-charge-fill"></i> {{ s.asignacion_servicio }}</span>
+                            <span class="ct-badge ct-badge-purple">{{ s.asignacion_servicio }}</span>
                         {% elif 'URGENCIA' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-red"><i class="bi bi-exclamation-circle"></i> {{ s.asignacion_servicio }}</span>
+                            <span class="ct-badge ct-badge-red">{{ s.asignacion_servicio }}</span>
                         {% elif 'CONSOLIDADO' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-blue"><i class="bi bi-boxes"></i> {{ s.asignacion_servicio }}</span>
+                            <span class="ct-badge ct-badge-blue">{{ s.asignacion_servicio }}</span>
                         {% elif 'DEDICADO' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-slate"><i class="bi bi-truck"></i> {{ s.asignacion_servicio }}</span>
+                            <span class="ct-badge ct-badge-slate">{{ s.asignacion_servicio }}</span>
                         {% else %}
                             <span class="ct-badge ct-badge-slate">{{ s.asignacion_servicio }}</span>
                         {% endif %}
@@ -186,71 +240,4 @@
     </div>
 </div>
 
-<!-- Incidencias -->
-{% if incidencias %}
-<div class="ct-card ct-card-danger">
-    <div class="ct-card-header">
-        <div class="ct-danger-title">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            Incidencias (Citas No Cumplidas)
-            <span class="ct-badge ct-danger-count">{{ incidencias|length }}</span>
-        </div>
-    </div>
-    <div class="ct-table-scroll">
-        <table class="ct-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>F. Entrega</th>
-                    <th>Placa</th>
-                    <th>Asignacion</th>
-                    <th>Punto Cargue</th>
-                    <th>Destino</th>
-                    <th>Cita</th>
-                    <th>Llegada</th>
-                    <th>Delta</th>
-                    <th>Obs.</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in incidencias %}
-                <tr>
-                    <td class="muted">{{ loop.index }}</td>
-                    <td style="white-space:nowrap">{{ s.fecha_entrega }}</td>
-                    <td>
-                        <div style="display:flex;align-items:center;gap:8px">
-                            <div style="padding:4px;background:rgba(220,38,38,0.1);border-radius:4px;display:flex">
-                                <i class="bi bi-truck" style="font-size:14px;color:#DC2626"></i>
-                            </div>
-                            <span class="mono">{{ s.placa }}</span>
-                        </div>
-                    </td>
-                    <td>
-                        {% if 'SOS' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-purple"><i class="bi bi-lightning-charge-fill"></i> {{ s.asignacion_servicio }}</span>
-                        {% elif 'CONSOLIDADO' in s.asignacion_servicio.upper() %}
-                            <span class="ct-badge ct-badge-blue"><i class="bi bi-boxes"></i> {{ s.asignacion_servicio }}</span>
-                        {% else %}
-                            <span class="ct-badge ct-badge-slate">{{ s.asignacion_servicio }}</span>
-                        {% endif %}
-                    </td>
-                    <td class="truncate">{{ s.punto_cargue }}</td>
-                    <td class="truncate">{{ s.punto_entrega }}</td>
-                    <td class="mono" style="white-space:nowrap">{{ s.cita_entrega }}</td>
-                    <td class="mono" style="white-space:nowrap">
-                        {% if s.hora_llegada %}{% if ' ' in s.hora_llegada %}{{ s.hora_llegada.split(' ')[1] }}{% else %}{{ s.hora_llegada }}{% endif %}{% endif %}
-                    </td>
-                    <td style="white-space:nowrap">
-                        {% if s.arrival_delta_minutes is not none %}
-                            <span class="ct-badge ct-badge-red">+{{ s.arrival_delta_minutes }} min</span>
-                        {% endif %}
-                    </td>
-                    <td class="truncate muted" style="font-size:12px">{{ s.observaciones }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endif %}
 {% endblock %}

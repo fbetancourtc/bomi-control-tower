@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}Reporte de Cumplimiento — BOMI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col">
+        <div class="card stat-card" style="background: linear-gradient(135deg, var(--bomi-primary), var(--bomi-secondary));">
+            <div class="card-body text-white text-center py-4">
+                <h3 class="mb-1"><i class="bi bi-shield-check"></i> Reporte de Cumplimiento de Citas</h3>
+                <p class="mb-0 opacity-75">FlexOS → BOMI | Control Tower</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main KPIs -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="compliance-big {% if metrics.compliance_pct >= 90 %}compliance-good{% elif metrics.compliance_pct >= 70 %}compliance-warning{% else %}compliance-bad{% endif %}">
+                    {{ metrics.compliance_pct }}%
+                </div>
+                <div class="stat-label mt-2">Cumplimiento de Citas</div>
+                <div class="text-muted small mt-1">{{ metrics.met }} de {{ metrics.completed }} servicios completados</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100">
+            <div class="card-body text-center py-4">
+                <div class="stat-value text-primary">{{ metrics.total }}</div>
+                <div class="stat-label mt-2">Total Servicios</div>
+                <div class="text-muted small mt-1">
+                    {{ metrics.completed }} completados · {{ metrics.pending }} pendientes
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card h-100 {% if metrics.missed > 0 %}border-danger border-opacity-50{% endif %}">
+            <div class="card-body text-center py-4">
+                <div class="stat-value text-danger">{{ metrics.missed }}</div>
+                <div class="stat-label mt-2">Incidencias</div>
+                <div class="text-muted small mt-1">Citas no cumplidas</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Compliance by Type -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-bar-chart"></i> Cumplimiento por Tipo de Operación</h6>
+                <canvas id="chartCompliance" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <h6 class="section-title"><i class="bi bi-list-check"></i> Detalle por Tipo</h6>
+                <table class="table table-sm align-middle">
+                    <thead><tr><th>Tipo de Operación</th><th class="text-center">Servicios</th><th class="text-center">Cumplió</th><th class="text-center">No Cumplió</th><th class="text-center">%</th></tr></thead>
+                    <tbody>
+                        {% for name, data in metrics.by_tipo_op.items() %}
+                        <tr>
+                            <td><strong>{{ name }}</strong></td>
+                            <td class="text-center">{{ data.total }}</td>
+                            <td class="text-center text-success">{{ data.met }}</td>
+                            <td class="text-center text-danger">{{ data.missed }}</td>
+                            <td class="text-center">
+                                <div class="progress" style="height: 20px; min-width: 80px;">
+                                    <div class="progress-bar {% if data.compliance_pct >= 90 %}bg-success{% elif data.compliance_pct >= 70 %}bg-warning{% else %}bg-danger{% endif %}"
+                                         style="width: {{ data.compliance_pct }}%">
+                                        {{ data.compliance_pct }}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incidencias Detail -->
+{% if incidencias %}
+<div class="card stat-card mb-4 border-danger border-opacity-25">
+    <div class="card-body">
+        <h6 class="section-title" style="border-color: var(--bomi-danger); color: var(--bomi-danger);">
+            <i class="bi bi-exclamation-triangle"></i> Detalle de Incidencias
+            <span class="badge bg-danger ms-2">{{ incidencias|length }}</span>
+        </h6>
+        <div class="table-responsive">
+            <table class="table table-hover table-sm">
+                <thead class="table-danger">
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Punto Cargue</th>
+                        <th>Tipo Operación</th>
+                        <th>Asignación</th>
+                        <th>Placa</th>
+                        <th>Punto de Entrega</th>
+                        <th>Cita</th>
+                        <th>Hora Llegada</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in incidencias %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="text-nowrap">{{ s.fecha }}</td>
+                        <td>{{ s.punto_cargue }}</td>
+                        <td>{{ s.tipo_operacion }}</td>
+                        <td>
+                            <span class="badge {% if 'SOS' in s.asignacion_servicio.upper() %}badge-sos{% elif 'URGENCIA' in s.asignacion_servicio.upper() %}badge-urgencia{% else %}bg-secondary{% endif %}">
+                                {{ s.asignacion_servicio }}
+                            </span>
+                        </td>
+                        <td><code>{{ s.placa }}</code></td>
+                        <td style="max-width: 250px;">{{ s.punto_entrega }}</td>
+                        <td class="text-nowrap">{{ s.cita_entrega }}</td>
+                        <td class="text-nowrap">{{ s.hora_llegada }}</td>
+                        <td style="max-width: 200px; font-size: 0.8rem;">{{ s.observaciones }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="card stat-card mb-4 border-success border-opacity-25">
+    <div class="card-body text-center py-4">
+        <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+        <h5 class="mt-2 text-success">Sin incidencias</h5>
+        <p class="text-muted">Todas las citas han sido cumplidas</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- Footer -->
+<div class="text-center text-muted small mb-4">
+    <i class="bi bi-clock"></i> Datos actualizados automáticamente cada 45 segundos
+    {% if last_updated %} · Última actualización: {{ last_updated.strftime('%Y-%m-%d %H:%M:%S') }}{% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const tipoData = {{ metrics.by_tipo_op | tojson }};
+const labels = Object.keys(tipoData);
+const metData = labels.map(k => tipoData[k].met);
+const missedData = labels.map(k => tipoData[k].missed);
+const pendingData = labels.map(k => tipoData[k].pending);
+
+new Chart(document.getElementById('chartCompliance'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            { label: 'Cumplió', data: metData, backgroundColor: '#27ae60' },
+            { label: 'No Cumplió', data: missedData, backgroundColor: '#e74c3c' },
+            { label: 'Pendiente', data: pendingData, backgroundColor: '#95a5a6' }
+        ]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        scales: { x: { stacked: true }, y: { stacked: true } },
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
+</script>
+{% endblock %}
