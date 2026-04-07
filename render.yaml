@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: bomi-control-tower
+    runtime: docker
+    plan: free
+    envVars:
+      - key: GOOGLE_SA_KEY
+        sync: false
+      - key: BOMI_SHEET_ID
+        value: 1nlwPV97FE3zouKL519lBGJJExuZkWZCehzflxw_xaNo
+      - key: POLL_INTERVAL_SECONDS
+        value: '45'
