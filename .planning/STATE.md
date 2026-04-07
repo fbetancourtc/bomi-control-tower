@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-31)
 Phase: 1 of 11 (Project Scaffold & Google Sheets Connection)
 Plan: 0 of 2 in current phase
 Status: Ready to plan
-Last activity: 2026-03-31 — Roadmap created with 11 phases covering 33 v1 requirements
+Last activity: 2026-04-07 - Completed quick task 260407-mrc: Analizar lead time vs cita vs hora real de llegada para determinar cumplimiento de cita
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -73,6 +73,12 @@ None yet.
 
 - Google Sheets API rate limit (60 reads/min/user) -- mitigated by server-side caching in Phase 2
 - Exact latest versions of FastAPI, HTMX, Chart.js should be verified at Phase 1 setup
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260407-mrc | Analizar lead time vs cita vs hora real de llegada para determinar cumplimiento de cita | 2026-04-07 | 6321696 | [260407-mrc-analizar-lead-time-vs-cita-vs-hora-real-](./quick/260407-mrc-analizar-lead-time-vs-cita-vs-hora-real-/) |
 
 ## Session Continuity
 
